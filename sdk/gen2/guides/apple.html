@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>How to Traffic BrightLine</title>
+
+	<link rel="stylesheet" href="/sdk/gen2/media/css/atom-one-dark.css">
+	<script src="/sdk/gen2/media/js/highlight.pack.js"></script>
+	<script>hljs.initHighlightingOnLoad();</script>
+
+	<style type="text/css">
+		
+		#contents { background-color:rgba(25,115,196,1) !important; }
+
+		.select_guide { width:24vw; background-color:black; color:white; text-align:center; padding:4%; font-size:280%; float:left; margin-right:4%; cursor:pointer; border:1px solid rgba(0,0,0,0.2);}
+		#tvos { background:linear-gradient(rgba(205,52,192,1), rgba(130,5,178,1)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+		#ios { background:linear-gradient(to bottom right, rgba(5,68,255,1) 0%, rgba(1,181,244,1) 33%, rgba(132,222,65,1) 66%, rgba(209,240,14,1) 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent;  }
+
+	</style>
+
+	<link rel="stylesheet" type="text/css" href="/sdk/gen2/media/css/main.css" />
+</head>
+<body>
+
+	<div id="nav_holder">
+		<div id="apple_guides" class="nav_button">Apple Guides</div>
+		<div id="android_guide" class="nav_button">Android Guide</div>
+		<div id="roku_guides" class="nav_button">Roku Guides</div>
+		<div id="webkit_guide" class="nav_button">WebKit Guide</div>
+		<div id="ad_ops_guide" class="nav_button">Ad Ops Guide</div>
+	</div>
+
+	<a class="goto" name="top">&nbsp;</a>
+	<div id="logo"><img src="/common/media/images/brightline-logo.png"></div>
+
+	<div id="contents">
+		<span>Contents:</span>
+		<ul class="content_list">
+			<li onclick="goto('/sdk/gen2/guides/ios.html')">iOS</li>
+			<li onclick="goto('/sdk/gen2/guides/tvos.html')">tvOS</li>
+		</ul>
+	</div>
+
+	<script type="text/javascript" src="/sdk/gen2/media/js/main.js"></script>
+
+	<div id="content_holder">
+		<h1>BrightLine Apple SDK Guides</h1>
+
+		<div class="intro">
+			<p>
+				Select the platform you want to start with below:
+				<div id="ios" class="select_guide">iOS SSAI</div>
+				<div id="tvos" class="select_guide">tvOS SSAI</div>
+
+			</p>
+
+		</div>
+	</div>
+
+	<script type="text/javascript">
+		
+		var ios = document.getElementById('ios');
+		var tvos = document.getElementById('tvos');
+
+		ios.addEventListener('click', function(){
+			goto('/sdk/gen2/guides/ios.html');
+		});
+
+		tvos.addEventListener('click', function(){
+			goto('/sdk/gen2/guides/tvos.html');
+		});
+
+	</script>
+
+</body>
+</html>

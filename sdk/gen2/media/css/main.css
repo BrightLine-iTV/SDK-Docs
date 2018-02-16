@@ -1,0 +1,67 @@
+		@font-face { font-family:flama; src:url(/common/media/fonts/flama-webfont.woff); }
+		@font-face { font-family:proxima; src:url(/common/media/fonts/proximanova-regular.woff); }
+		@font-face { font-family:alternategothic; src:url(/common/media/fonts/alternate-gothic.woff); }
+
+		body { margin:0; width:100vw; height:100vw; font-family:helvetica, arial, sans-serif; overflow-x:hidden; }
+		p { line-height:1.5em;  }
+
+		.content_list a:link, .content_list a:visited {color:rgba(255,255,255,1); text-decoration:none; }
+		.content_list a:link:active, .content_list a:visited:active { color:rgba(255,255,255,1); }
+
+		#logo {background-color:rgb(255,255,255); width:74vw; margin:0 0 0 26vw; overflow:hidden; }
+		#logo img { width:40vw; padding-top:5%; }
+
+		#nav_holder { width:78vw; position:fixed; top:0; margin-left:21.9vw; }
+			.nav_button { float:left; width:12.4vw; color:white; padding:2%; text-align:center; cursor:pointer; }
+			#apple_guides { background-color:rgba(31,144,245,1); }
+			#android_guide { background-color:rgba(133,200,8,1); }
+			#roku_guides { background-color:rgba(101,45,144,1); }
+			#webkit_guide { background-color:rgba(218,27,81,1); }
+			#ad_ops_guide { background-color:rgba(0,0,0,1); }
+
+		@media screen and (max-width: 870px) and (min-width:0px) {
+			#contents { display:none; }
+			#content_holder { width:90vw !important; margin-left:3% !important; }
+			#logo { margin-left:3% !important; }
+			#nav_holder { width:100vw !important; margin-left:0 !important; }
+			.nav_button { width:15.65vw !important; }
+		}
+
+		@media screen and (max-width: 660px) and (min-width:0px) {
+			#logo { margin-top:8% !important; }
+		}
+
+		
+		#contents { width:18vw; height:98vh; padding:2%; position:fixed; top:0; background-color:rgb(0,0,0); font-size:0.8em; color:white; overflow-x:scroll; }
+			#contents span { display:block; margin:10% 0 20% 0; font-size:2em; font-family:proxima; }			
+			#contents ul { margin:0; padding:0; list-style: none; }
+				#contents li { background-color:rgba(255,255,255,0.1); padding:4%; margin:4% 0 0 0; cursor:pointer; }
+					.sub { margin:4% 0 0 10% !important; padding:1% !important; border:0px !important;  background-color:rgba(255,255,255,0) !important; }
+					.item { margin-left: 20% !important; }
+		
+		#content_holder { width:70vw; overflow:hidden; margin:0 0 1150px 26vw; }
+
+		ol li { margin:4% 0 4% 0; }
+		ul li { margin:1% 0 1% 0; }
+
+		h1 { color:rgb(94,65,157); font-family:proxima; }
+		h2 { color:rgb(94,65,157); font-family:proxima; margin-top:40px; }
+		h3 { color:rgb(22,101,171); font-family:proxima; font-size:1.3em; margin-top:3%; }
+		h4 { color:rgb(22,101,171); font-family:proxima; font-size:1.2em; margin-top:3%; }
+
+
+		.info { color:gray; line-height:1.5em; margin:0 0 100px 0; }
+		.intro { color:rgb(22,101,171); font-size:1.2em; line-height:1.5em; margin:0 0 100px 0; }
+
+		.note { margin:5% 0 5% 0; font-size:0.9em; line-height:1.4em; padding:2% 1% 2% 1%; outline:1px solid rgba(112, 173, 71, 1); border-left:20px solid rgba(112, 173, 71, 1); width:95%; background-color:rgba(254,249,240,1); }
+		.note_warning { margin:5% 0 5% 0; font-size:0.9em; line-height:1.4em; padding:2% 1% 2% 1%; outline:1px solid rgba(255,0,102, 1); border-left:20px solid rgba(255,0,102, 1); width:95%; background-color:rgba(254,249,240,1); }
+			.note_warning strong { color:solid rgba(255,0,102, 1) !important; }
+		.callout { margin:5% 0 5% 0; font-size:0.9em; line-height:1.4em; padding:2% 1% 2% 1%; border:1px solid rgba(0,0,0,0.5); width:95%; background-color:rgba(254,249,240,1); }
+
+
+		blockquote { margin-top:4%; margin-bottom:4%; }
+		blockquote span { font-weight:bold; font-style:italic; }
+		blockquote a:link, blockquote a:visited { color:rgb(22,101,171); text-decoration:none; }
+		blockquote a:link:active, blockquote a:visited:active { color:rgb(22,101,171); }
+
+		.goto { display:block; padding-top:2.5%; }

@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>iOS Framework Integration Guide Server-Side Ad Insertion (SSAI)</title>
+
+	<link rel="stylesheet" href="/sdk/gen2/media/css/xcode.css">
+	<script src="/sdk/gen2/media/js/highlight.pack.js"></script>
+	<script>hljs.initHighlightingOnLoad();</script>
+
+	<link rel="stylesheet" type="text/css" href="/sdk/gen2/media/css/main.css" />
+
+	<style type="text/css">
+
+		#contents { background-color:rgba(5,68,255,1) !important; /*background:linear-gradient(rgba(5,68,255,1) 0%, rgba(1,181,244,1) 33%, rgba(132,222,65,1) 66%, rgba(209,240,14,1) 100%) !important;*/ }
+		
+		code { border:1px solid silver; }
+
+		#contents li { background-color:rgba(0,0,0,0.3); }
+		.sub {  background-color:rgba(0,0,0,0.2) !important; padding:4% !important; }
+		.item { background-color:rgba(0,0,0,0.1) !important; }
+		
+
+		.select_guide { width:26vw; background-color:black; color:white; text-align:center; padding:4%; font-size:180%; float:left; margin-right:4%; cursor:pointer; border:1px solid rgba(0,0,0,0.2); margin-bottom:10%; }
+		.ios { background:linear-gradient(to bottom right, rgba(5,68,255,1) 0%, rgba(1,181,244,1) 33%, rgba(132,222,65,1) 66%, rgba(209,240,14,1) 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent;  }
+
+		h3 { margin-bottom:-1%;  }
+
+	</style>
+
+</head>
+<body>
+
+	<div id="nav_holder">
+		<div id="apple_guides" class="nav_button">Apple Guides</div>
+		<div id="android_guide" class="nav_button">Android Guide</div>
+		<div id="roku_guides" class="nav_button">Roku Guides</div>
+		<div id="webkit_guide" class="nav_button">WebKit Guide</div>
+		<div id="ad_ops_guide" class="nav_button">Ad Ops Guide</div>
+	</div>
+
+	<a class="goto" name="top">&nbsp;</a>
+	<div id="logo"><img src="/common/media/images/brightline-logo.png"></div>
+
+	<div id="contents">
+		<span>Contents:</span>
+		<ul class="content_list">
+			<li onclick="goto('#top')">Top</li>
+
+			<li onclick="goto('#overview')">Overview</li>
+
+			<li onclick="goto('#download_packages')">Download iOS Packages</li>
+				<li class="sub" onclick="goto('#')">iOS for Xcode 9+</li>
+				<li class="sub" onclick="goto('#')">iOS for Xcode 8.2.1</li>
+
+			<li onclick="goto('#step-1-sdk-setup')">Step 1: SDK setup</li>
+				<li class="sub" onclick="goto('#linking-required-libraries-in-xcode')">1.1 Linking required libraries in Xcode</li>
+				<li class="sub" onclick="goto('#configure-build-settings')">1.2 Configure build settings</li>
+				<li class="sub" onclick="goto('#import-brightline-sdk-header')">1.3 Import BrightLine SDK header</li>
+					<li class="sub item" onclick="goto('#import-brightline-sdk-header-objective-c')">- Objective-C</li>
+					<li class="sub item" onclick="goto('#import-brightline-sdk-header-swift')">- Swift</li>
+				<li class="sub" onclick="goto('#implementing-callbacks')">1.4 Implementing BLCoreEventsDelegate to receive callbacks</li>
+					<li class="sub item" onclick="goto('#objective-c-callbacks')">- Objective-C</li>
+					<li class="sub item" onclick="goto('#swift-callbacks')">- Swift</li>
+				<li class="sub" onclick="goto('#compiling-your-application')">1.5 Compiling your application</li>
+				<li class="sub" onclick="goto('#app-transport-security')">1.6 App Transport Security (ATS)</li>
+
+			<li onclick="goto('#step-2-initializing-the-sdk-framework')">Step 2: Initializing the BrightLine Framework</li>
+				<li class="sub" onclick="goto('#example-configuration-url')">- Example configuration URL</li>
+				<li class="sub" onclick="goto('#analytics-root-url')">- Analytics root URL</li>
+				<li class="sub" onclick="goto('#objective-c-analytics')">- Objective-C</li>
+				<li class="sub" onclick="goto('#swift-analytics')">- Swift</li>
+
+			<li onclick="goto('#step-3-displaying-brightline-ads')">Step 3: Displaying BrightLine ads</li>
+				<li class="sub" onclick="goto('#vast-trackingevents-ownership')">3.1 VAST trackingEvents ownership</li>
+					<li class="sub item" onclick="goto('#construct-json-ad-definition')">- Construct JSON ad definition ad data object</li>
+					<li class="sub item" onclick="goto('#ad-definition-attributes')">- Ad definition attributes</li>
+					<li class="sub item" onclick="goto('#objective-c-ad-definition')">- Objective-C</li>
+					<li class="sub item" onclick="goto('#swift-ad-definition')">- Swift</li>
+				<li class="sub" onclick="goto('#updating-adview-frame')">3.2 Updating adView frame</li>
+
+			<li onclick="goto('#step-4-removing-brightline-ads')">Step 4: Removing BrightLine ads</li>
+				<li class="sub" onclick="goto('#removing-brightline-ads-objective-c')">- Objective-C</li>
+				<li class="sub" onclick="goto('#removing-brightline-ads-swift')">- Swift</li>
+
+			<li onclick="goto('#step-5-business-logic-for-brightline-ads')">Step 5: Business logic for BrightLine ads</li>
+
+			<li onclick="goto('#step-6-review-sample-applications')">Step 6: Review sample applications</li>
+				<li class="sub" onclick="goto('#sample-vast-tags')">- Sample VAST tags</li>
+
+			<li onclick="goto('#brightline-sdk-cycle-flow-chart')">BrightLine SDK life cycle flow chart</li>
+
+			<li onclick="goto('#server-side-ad-insertion-uml')">Server side ad insertion UML</li>
+
+			<li onclick="goto('#server-side-ad-insertion-flow-chart')">Server side ad insertion flow chart</li>
+
+		</ul>
+		<p>&nbsp;</p>
+	</div>
+
+	<script type="text/javascript" src="/sdk/gen2/media/js/main.js"></script>
+
+	<div id="content_holder">
+		<h1>iOS Framework Integration Guide Server-Side Ad Insertion (SSAI)</h1>
+		<p class="info">
+			Framework Version: 1.0.1<br>
+			Last Updated: 11/06/2017<br>
+			Supports: iOS 8.0+ for iPhone and iPad<br>
+		</p>
+
+		<div class="intro">
+			<p>
+				This document explains how to integrate the BrightLine iOS SDK within a native (Objective-C/Swift) application that supports Server Side Ad Insertion (SSAI)
+			</p>
+
+			<a class="goto" name="download_packages">&nbsp;</a>
+			<h2>Download the iOS packages below for your development harness:</h2>
+			
+			
+			<div id="ios_9" class="select_guide ios">iOS for Xcode 9+</div>
+			<div id="ios_8" class="select_guide ios">iOS for Xcode 8.2.1</div>
+			
+		</div>
+
+		<a class="goto" name="overview">&nbsp;</a>
+		<h2>Overview</h2>
+		<p class="body_content">
+			The BrightLine iOS SDK is an Objective-C framework that can be integrated within a native Objective-C/Swift application. All BrightLine ad experiences are rendered using a UIWebView instance per ad render. We'll go over in detail the integration steps for setting up, initializing, and renderingdestroying ads. 
+		</p>
+
+		<hr class="dots">
+		
+		<a class="goto" name="step-1-sdk-setup">&nbsp;</a>
+		<h2>Step 1: SDK setup</h2>
+
+		<a class="goto" name="linking-required-libraries-in-xcode">&nbsp;</a>
+		<h3>1.1 Linking required libraries in Xcode</h3>
+		<p class="body_content">
+			 From the application's target window, link the frameworks in Xcode in the <strong>"Link Binary With Libraries"</strong> section in the <strong>"Build Phases"</strong> tab.
+		</p>
+		<img src="/sdk/gen2/media/images/linking-required-libraries-in-xcode.png" width="100%" border="0" />
+		
+		<a class="goto" name="configure-build-settings">&nbsp;</a>
+		<h3>1.2 Configure build settings</h3>
+		<p class="body_content">
+			From the application's target window, add the following compiler linker flags in the <strong>"Other Linker Flags"</strong> section in the <strong>"Build Settings"</strong> tab.
+		</p>
+		<img src="/sdk/gen2/media/images/configure-build-settings.png" width="100%" border="0" />
+
+		<a class="goto" name="import-brightline-sdk-header">&nbsp;</a>
+		<h3>1.3 Import BrightLine SDK header</h3>
+
+		<a class="goto" name="import-brightline-sdk-header-objective-c">&nbsp;</a>
+		<h4>Objective-C</h4>
+		<p class="body_content">
+			Add the following import statement <strong>"#import&lt;BLSKDKiOS/BLCore.h&gt;"</strong> in the view controller class that will display the ad.
+		</p>
+
+		<a class="goto" name="import-brightline-sdk-header-swift">&nbsp;</a>
+		<h4>Swift</h4>
+		<p class="body_content">
+			To communicate with the BrightLine Objective-C classes, an Objective-C bridge-header file is required in the application's target <strong>"Build Settings."</strong> Create a header file and include the following import <strong>"#import&lt;BLSKDKiOS/BLCore.h&gt;"</strong> in the header. Reference the header file in the <strong>"Build Settings"</strong> tab.
+		</p>
+		<img src="/sdk/gen2/media/images/import-brightline-sdk-header.png" width="100%" border="0" />
+
+		<a class="goto" name="implementing-callbacks">&nbsp;</a>
+		<h3>1.4 Implement BLCoreEventDelegate to receive callbacks</h3>
+
+		<a class="goto" name="objective-c-callbacks">&nbsp;</a>
+		<h4>Objective-C</h4>
+
+		<pre>
+			<code class="objectivec">
+@interface ViewController ()&lt;BLCoreEventDelegate&gt;
+@end
+@implementation ViewController
+@end
+
+-(void)BLInitialize:(NSString*)libVersion{
+	// An SDK event called when framework receives publisher configuration response successfully
+}
+
+-(void)BLInitializeFailed:(NSString*)libVersion: (NSError*)error{
+	// An SDK event called when framework failed to get publisher configuration response
+}
+
+-(void)BLOverlayDidClose{
+	// An Ad event called when the overlay is closed
+}
+
+-(void)BLOverlayDidOpen{
+	// An event called when the overlay opens
+}
+
+-(void)BLMicrositeDidClose{
+	//An Ad event called when microsite closes
+}
+
+-(void)BLMicrositeDidOpen{
+	// An Ad event called when microsite opens
+}
+
+
+-(void)BLManifestRequested{
+	// An SDK event called when publisher configuration is requested
+}
+
+-(void)BLManifestLoaded{
+	// An SDK event called when publisher configuration is loaded
+}
+
+-(void)BLManifestUnavailable{
+	//An SDK event called when publisher configuration is unavailable
+}
+
+-(void)BLAdRequested{
+	// An Ad event called when Ad is requested from Ad server
+}
+
+-(void)BLAdUnavailable{
+	// An Ad event called when Ad is unavailable
+}
+
+-(void)BLAdLoaded{
+	// An Ad event called when Ad is loaded
+}
+
+-(void)BLAdDestroyed{
+	// An event called when Ad is completely removed from memory and is no longer displayed. Invoked by calling hideAd method externally or internally in the SDK
+}
+
+-(void) BLPlayerSpotFirstQuartile{
+	// An Ad event called when spot video reaches 25 percent completion. This event is called only for clientside integrations
+}
+
+-(void) blPlayerSpotMidPointQuartile{
+	// An Ad event called when spot video reaches 50 percent completion. This event is called only for clientside integrations
+}
+
+-(void) blPlayerSpotThirdQuartile{
+	// An Ad event called when spot video reaches 75 percent completion. This event is called only for clientside integrations fired
+}
+
+-(void) blPlayerSpotCompleteQuartile{
+	// An Ad event called when spot video reaches 100 percent completion. This event is called only for clientside integrations
+}
+			</code>
+		</pre>
+
+
+		<a class="goto" name="swift-callbacks">&nbsp;</a>
+		<h4>Swift</h4>
+
+		<pre>
+			<code class="swift">
+func blInitialize(_ libVersion: String!) {
+	//event called when framework receives publisher configuration response successfully
+}
+
+func blInitializeFailed(_libVersion: String!, _ error: Error!) {
+	//event called when framework failed to get publisher configuration response
+}
+
+func blOverlayDidOpen() {
+	//event called when the overlay opens
+}
+
+func blOverlayDidClose() {
+	//event called when the overlay is closed
+}
+
+func blMicrositeDidOpen() {
+	//event called when microsite opens
+}
+
+func blMicrositeDidClose() {
+	//event called when microsite closes
+}
+
+func blManifestRequested(){
+	//event called when publisher configuration is requested
+}
+
+func blManifestLoaded(){
+	//event called when publisher configuration is loaded
+}
+
+func blManifestUnavailable(){
+	//event called when publisher configuration is unavailable
+}
+
+func blAdRequested(){
+	//event called when Ad is requested
+}
+
+func blAdUnavailable (){
+	//event called when Ad is unavailable
+}
+
+func blAdLoaded (){
+	//event called when Ad is loaded
+}
+
+func blAdDestroyed (){
+	//event called when Ad is completely removed from memory and is no longer displayed
+}
+
+func blPlayerSpotFirstQuartile (){
+	// An Ad event called when spot video reaches 25 percent completion. This event is called only for clientside integrations
+}
+
+func blPlayerSpotMidPointQuartile (){
+	// An Ad event called when spot video reaches 50 percent completion. This event is called only for clientside integrations
+}
+
+func blPlayerSpotThirdQuartile (){
+	// An Ad event called when spot video reaches 75 percent completion. This event is called only for clientside integrations
+}
+
+func blPlayerSpotCompleteQuartile (){
+	// An Ad event called when spot video reaches 100 percent completion. This event is called only for clientside integrations
+}
+			</code>
+		</pre>
+
+		<a class="goto" name="compiling-your-application">&nbsp;</a>
+		<h3>1.5 Compiling your application</h3>
+		<p class="body_content">
+			 Compile your application to ensure no errors occurred. If successful, the SDK is correctly integrated and ready for usage.
+		</p>
+
+		<a class="goto" name="app-transport-security">&nbsp;</a>
+		<h3>1.6 App Transport Security (ATS)</h3>
+		<div class="note_warning">
+			Important:<br>
+			Apple <strong>requires</strong> applications to use HTTPS schemes for all data exchange between applications and servers. ATS <strong>must NOT</strong> be disabled in the hosting application and <strong>must NOT</strong> allow HTTP schemes. If an HTTP scheme is executed, the request will be blocked.
+		</div>
+
+		<a class="goto" name="step-2-initializing-the-sdk-framework">&nbsp;</a>
+		<h2>Step 2: Initializing the BrightLine framework</h2>
+		<p class="body_content">
+			The BrightLine SDK framework is initialized with the configuration and analytics URL provided by BrightLine during the onboarding process. If you haven't received your configuration URL yet, use the example configuration URL below.
+		</p>
+
+		<div class="note_warning">
+			Important:<br>
+			You must initialize the BrightLine SDK on application load within the <strong>didFinishLaunchingWithOptions</strong> method
+		</div>
+
+		<a class="goto" name="example-configuration-url">&nbsp;</a>
+		<h3>Example configuration URL</h3>
+		<blockquote><a href="https://services.brightline.tv/api/v2/config/1018" target="_blank">https://services.brightline.tv/api/v2/config/1018</a></blockquote>
+		<div class="note_warning">
+			Important:<br>
+			<strong>You'll need a production ID from us before pushing your app to production.</strong>
+			The configuration URL is needed to retrieve publisher configuration data, event tracking data, etc. You can use the above URL <strong>(1018)</strong> to develop and test, but we'll provide you with your own production ID during the onboarding process.
+		</div>
+
+		<a class="goto" name="analytics-root-url">&nbsp;</a>
+		<h3>Analytics root URL</h3>
+		<blockquote><a href="https://events.brightline.tv/track" target="_blank">https://events.brightline.tv/track</a></blockquote>
+		<div class="note">
+			FYI only.<br>
+			You won't be modifying this URL, but you'll see POSTS from this domain for app and app analytics. This analytics URL provides the mechanism to send the tracking events to the BrightLine servers.
+		</div>
+
+		<a class="goto" name="objective-c-analytics">&nbsp;</a>
+		<h4>Objective-C</h4>
+
+		<pre>
+			<code class="objectivec">
+[[BLCore sharedManager]initFramework: @"put the configuration URL here" withAnalytics:@"put the analytics URL here", withDelegate:self];
+			</code>
+		</pre>
+
+
+		<a class="goto" name="swift-analytics">&nbsp;</a>
+		<h4>Swift</h4>
+
+		<pre>
+			<code class="swift">
+BLCore.sharedManager().initFramework("put the configuration URL here", withAnalytics: "put the analytics URL here", withDelegate: self)
+			</code>
+		</pre>
+
+		<div class="note_warning">
+			<p>
+				Important:<br>
+				If an error occurs when initializing the framework, the <strong>BLInitializedFailed</strong> event callback method is invoked. Otherwise, the <strong>BLInitialize</strong> method is invoked indicating a successful initialization. 
+			</p>
+			<p>
+				The <strong>initFramework</strong> should only be called multiple times if the <strong>BLInitializeFailed</strong> was invoked. After <strong>BLInitializ</strong> is invoked, the hosting application can call the showAd method multiple times for displaying the BrightLine Ad experiences.
+			</p>
+		</div>
+
+		<a class="goto" name="step-3-displaying-brightline-ads">&nbsp;</a>
+		<h2>Step 3: Displaying BrightLine ads</h2>
+		<p class="body_content">
+			BrightLine ads are displayed by calling the <strong>showAdWithDefinition</strong> method for SSAI integrations.
+		</p>
+
+		<div class="note_warning">
+			Important:<br>
+			You must initialize the BrightLine SDK on application load within the <strong>didFinishLaunchingWithOptions</strong> method.
+		</div>
+
+		<a class="goto" name="vast-trackingevents-ownership">&nbsp;</a>
+		<h3>3.1 VAST trackingEvents ownership</h3>
+		<p class="body_content">
+			The hosting application will be responsible for displaying the promotional ad, sending playback tracking events (start, firstQuartile, midPoint, thirdQuartile and complete).
+		</p>
+		<p class="body_content">
+			The BrightLine SDK is responsible for sending companion ad tracking events (impression, acceptInvitation).
+		</p>
+		<p class="body_content">
+			When integrating with a SSAI vendor (mDialog/Google DAI, Uplynk, FreeWheel, etc.), the hosting application will trigger the BrightLine SDK in the appropriate ad break event callback method with a data object that contains the <strong>CompanionAds</strong> node from the BrightLine VAST tag. Below are the typical steps
+			when integrating.
+		</p>
+		<ol>
+			<li>Identify the appropriate ad break event callback method from the SSAI vendor during promotional ad playback</li>
+			<li>Once the ad break even callback is invoked, use the data object from the callback method to get access to the VAST <strong>CompanionAds</strong> node data.</li>
+			<li>Use the data object property that relates to the companion ad information and inspect the <strong>apiFramework</strong> attribute for value <strong>brightline</strong>.</li>
+		</ol>
+
+		<p class="body_content">
+			From the vendor ad break callback, construct a JSON schema (ad definition) indicated below from the vendor ad data object.
+		</p>
+
+		<a class="goto" name="construct-json-ad-definition">&nbsp;</a>
+		<h3>Construct JSON ad definition from SSAI vendor ad data object</h3>
+		<pre>
+			<code class="json">
+{
+	"apiFramework": "brightline",
+	"companion": {
+		"url": "http://",
+		"trackingEvents": {
+			"impression": [],
+			"acceptInvitation": []
+		}
+	}
+}
+			</code>
+		</pre>
+
+		<a class="goto" name="ad-definition-attributes">&nbsp;</a>
+		<h3>Ad definiton attributes</h3>
+		<ul>
+			<li><strong>apiFramework</strong> - this attribute should be populated from the vendor ad data object.</li>
+			<li><strong>companion.url</strong> - this attribute should be populated with the URLs from the iFrameResource element.</li>
+			<li><strong>companion.trackingEvents.impression</strong> - this attribute should be populated with all the URLs for when the overlay is displayed.</li>
+			<li><strong>companion.trackingEvents.acceptInvitation</strong> - this attribute should be populated with all the URLs for when the overlay is clicked.</li>
+		</ul>
+
+		<a class="goto" name="objective-c-ad-definition">&nbsp;</a>
+		<h4>Objective-C</h4>
+
+		<pre>
+			<code class="objectivec">
+// the variable "adResponse" is the constructed ad definition object from the SSAI vendor ad data object 
+NSString * adResponse;
+[[BLCore sharedManager]showAd:@"pass in the view controller that will display the ad" withDefinition:adResponse];
+			</code>
+		</pre>
+
+
+		<a class="goto" name="swift-ad-definition">&nbsp;</a>
+		<h4>Swift</h4>
+
+		<pre>
+			<code class="swift">
+(BLCore.sharedManager() as AnyObject).showAd("pass in the view controller that will display the ad", withDefinition:adResponse)
+			</code>
+		</pre>
+
+		<a class="goto" name="updating-adview-frame">&nbsp;</a>
+		<h3>3.2 Updating adView frame</h3>
+		<p class="body_content">
+			By default, the adView conforms to the size of the viewController that is passed in. This is typically fullscreen in portrait or landscape. Sometimes, there may be a need for an arbitrary frame for the adView. This can be done by calling method below.
+		</p>
+
+		<pre>
+			<code class="objectivec">
+(BLCore.sharedManager() as AnyObject).updateAdViewFrame(CGRect)
+			</code>
+		</pre>
+
+		<a class="goto" name="step-4-removing-brightline-ads">&nbsp;</a>
+		<h2>Step 4: Removing BrightLine ads</h2>
+		<p class="body_content">
+			The <strong>hideAd</strong> method should be called when the promotional ad ends. The <strong>hideAd</strong> method will remove the ad from memory and display. As a result, the <strong>BLAdDestroyed</strong> event callback is invoked.
+		</p>
+
+		<a class="goto" name="removing-brightline-ads-objective-c">&nbsp;</a>
+		<h3>Objective-C</h3>
+		<pre>
+			<code class="objectivec">
+[[BLCore sharedManager]hideAd];
+			</code>
+		</pre>
+
+		<a class="goto" name="removing-brightline-ads-swift">&nbsp;</a>
+		<h3>Swift</h3>
+		<pre>
+			<code class="swift">
+(BLCore.sharedManager() as AnyObject).hideAd();
+			</code>
+		</pre>
+		
+		<a class="goto" name="step-5-business-logic-for-brightline-ads">&nbsp;</a>
+		<h2>Step 5: Business logic for promotional ad</h2>
+		<div class="note_warning">
+			Important:<br>
+			During promotional ad playback, the user should not be able to pause/resume video and video controls should be disabled.
+		</div>
+
+
+		<a class="goto" name="step-6-review-sample-applications">&nbsp;</a>
+		<h2>Step 6: Review sample applications</h2>
+		<p class="body_content">
+			Say something here
+		</p>
+		<ul>
+			<li><strong>sample</strong> 1 - it does this</li>
+			<li><strong>sample 2</strong> - it does that</li>
+			<li><strong>sample 3</strong> - id does is all</li>
+		</ul>
+
+		<a class="goto" name="sample-vast-tags">&nbsp;</a>
+		<h3>Sample VAST tags</h3>
+		<blockquote><a href="https://events.brightline.tv/track" target="_blank">https://events.brightline.tv/track</a></blockquote>
+
+
+		<a class="goto" name="brightline-sdk-cycle-flow-chart">&nbsp;</a>
+		<h2>BrightLine SDK life cycle flow chart</h2>
+
+		<img src="/sdk/gen2/media/images/brightline-sdk-life-cycle-flow-chart.png" border="0" width="100%" />
+
+		<a class="goto" name="server-side-ad-insertion-uml">&nbsp;</a>
+		<h2>Server-side ad insertion UML</h2>
+
+		<img src="/sdk/gen2/media/images/server-side-ad-insertion-uml.png" border="0" width="100%" />
+
+		<a class="goto" name="server-side-ad-insertion-flow-chart">&nbsp;</a>
+		<h2>Server-side ad insertion flow chart</h2>
+
+		<img src="/sdk/gen2/media/images/server-side-ad-insertion-flow-chart.png" border="0" width="100%" />
+
+	</div>
+
+</body>
+</html>
+
+<!--
+
+	google dfp dai CBS and AMC
+	envato for NBCU
+
+-->

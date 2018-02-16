@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>How to Traffic BrightLine</title>
+
+	<link rel="stylesheet" href="/sdk/gen2/media/css/atom-one-dark.css">
+	<script src="/sdk/gen2/media/js/highlight.pack.js"></script>
+	<script>hljs.initHighlightingOnLoad();</script>
+
+	<link rel="stylesheet" type="text/css" href="/sdk/gen2/media/css/main.css" />
+</head>
+<body>
+
+	<div id="nav_holder">
+		<div id="apple_guides" class="nav_button">Apple Guides</div>
+		<div id="android_guide" class="nav_button">Android Guide</div>
+		<div id="roku_guides" class="nav_button">Roku Guides</div>
+		<div id="webkit_guide" class="nav_button">WebKit Guide</div>
+		<div id="ad_ops_guide" class="nav_button">Ad Ops Guide</div>
+	</div>
+
+	<a class="goto" name="top">&nbsp;</a>
+	<div id="logo"><img src="/common/media/images/brightline-logo.png"></div>
+
+	<div id="contents">
+		<span>Contents:</span>
+		<ul class="content_list">
+			<li onclick="goto('#top')">Top</li>
+			<li onclick="goto('#overview')">Overview</li>
+			<li onclick="goto('#tag-structure')">Tag structure</li>
+			<li onclick="goto('#vast-response-examples')">VAST response examples</li>
+			<li class="sub" onclick="goto('#vast-response-example-roku')">- Roku</li>
+			<li class="sub"onclick="goto('#vast-response-example-appletv')">- Apple TV</li>
+			<li class="sub"onclick="goto('#vast-response-example-webkit')">- WebKit (JS) &amp; mobile web</li>
+			<li onclick="goto('#brightline-vast-tracking')">BrightLine VAST tracking</li>
+			<li class="sub" onclick="goto('#brightline-vast-tracking-vast')">- VAST</li>
+			<li class="sub" onclick="goto('#brightline-vast-tracking-video')">- Video</li>
+			<li onclick="goto('#trackingevents-ownership')">TrackingEvents ownership</li>
+			<li onclick="goto('#vast-companion-banner-nodes')">VAST Companion banner nodes</li>
+			<li class="sub" onclick="goto('#vast-roku-companion-banner-nodes')">- Roku companion</a></li>
+			<li class="sub" onclick="goto('#vast-appletv-companion-banner-nodes')">- Apple TV companion</a></li>
+			<li class="sub" onclick="goto('#vast-webkit-companion-banner-nodes')">- WebKit companion</li>
+			<li onclick="goto('#general-ad-flow')">General ad flow</li>
+			<li class="sub" onclick="goto('#general-ad-flow-sample-json-ad-definition')">- Sample JSON ad definition from SSAI/DAI vendor ad data object</li>
+			<li class="sub" onclick="goto('#general-ad-flow-ad-definition-attributes')">- Ad definition attributes</li>
+		</ul>
+	</div>
+
+	<script type="text/javascript" src="/sdk/gen2/media/js/main.js"></script>
+
+	<div id="content_holder">
+		<h1>BrightLine Ad Ops Guide (SSAI/DAI) 1.0</h1>
+		<p class="info">
+			Served by: DFP Premium<br>
+			Last Updated: 07/27/2017<br>
+			Supports: VAST 2.0, 3.0, 4.0<br>
+		</p>
+
+		<div class="intro">
+			<p>
+				This document explains how to traffic BrightLine VAST ad tags for server side/dynamic ad insertion and details the response along with the deserialization and transformation of VAST objects passed to the BrightLine ad renderer.
+			</p>
+			<P>
+				This document is meant for ad operations and engineers for the understanding of the entire ad flow and how BrightLine experiences are traffic'd through your ad systems.
+			</p>
+		</div>
+
+		<a class="goto" name="overview">&nbsp;</a>
+		<h2>Overview</h2>
+		<p class="body_content">
+			BrightLine's primary ad server is <strong>DoubleClick for Publishers (DFP) Premium</strong>. BrightLine DFP VAST tags are IAB compliant for versions 2.0, 3.0 and 4.0. The BrightLine DFP VAST response includes BrightLine tracking that is collected by the BrightLine platform. You may include your own or 3rd party video tracking in your ad server's VAST wrapper.
+		</p>
+
+		<p class="body_content">
+			BrightLine delivers one DFP VAST ad tag per campaign for all platforms but may vary depending on your per campaign needs. The BrightLine DFP VAST response is not targeted and will run at 100% throughout the duration of your campaign. Your ad server is responsible for targeting parameters and pacing.
+		</p>
+
+		<div class="note">
+			Note:<br>
+			BrightLine serves custom creatives via DFP for VAST responses. BrightLine does not use DFP Video Line
+			Items.
+		</div>
+
+		<a class="goto" name="tag-structure">&nbsp;</a>
+		<h2>Tag structure</h2>
+		<p class="body_content">
+			 The following is an example BrightLine DFP VAST ad tag URL and its components. The URL structure must not be modified except for macro expansions.
+		</p>
+
+		<p>
+			<blockquote><a href="https://pubads.g.doubleclick.net/gampad/adx?iu=/52320903/dev&sz=2x2&c=INSERT-YOUR-CACHE-BUSTER-MACRO-HERE&cust_p
+		arams=campaign%3Dsample-vast-response%26device_model%3DINSERT-YOUR-DEVICE-MODEL-MACRO-HERE&m=text/xml" target="_blank">https://pubads.g.doubleclick.net/gampad/adx?iu=/52320903/dev&amp;sz=2x2&amp;c=INSERT-YOUR-CACHE-BUSTER-MACRO-HERE&amp;cust_p
+		arams=campaign%3Dsample-vast-response%26device_model%3DINSERT-YOUR-DEVICE-MODEL-MACRO-HERE&amp;m=text/xml</a></blockquote>
+		</p>
+
+		<p>
+			This is BrightLine's DFP network ID and tag structure:
+		</p>
+
+		<blockquote><span>http://pubads.g.doubleclick.net/gampad/adx?iu=/52320903</span></blockquote>
+
+		<p>
+			DFP ad unit the represents the property (appname, propertyname, etc.) and is case sensitive.
+		</p>
+		
+		<blockquote><span>/dev</span></blockquote>
+
+		<p>
+			The ad size for all BrightLine VAST responses:
+		</p>
+
+		<blockquote><span>/sz=2x2&amp;</span></blockquote>
+
+		<p>
+			You would insert your own cache buster macro or time stamp macro to prevent ad server caching:
+		</p>
+		
+		<blockquote><span>c=INSERT-YOUR-CACHE-BUSTER-MACRO-HERE&amp;</span></blockquote>
+
+		<p>
+			DFP targets with key vals. This key holds a URL encoded set of key vals and must not be unencoded or DFP will fail.
+		</p>
+
+		<blockquote><span>cust_params=</span></blockquote>
+		
+		<p>
+			BrightLine names a campaign for easy identification. "%3D" <strong>must not be unencoded</strong> to "=" and "%26" to "&amp;" or DFP will not understand the request.
+		</p>
+
+		<blockquote><span>Campaign%3Dsample-vast-response%26</span></blockquote>
+
+
+		<P>
+			DFP will respond with the correct device creative based on the expansion of the device model macro:
+		</P>
+			
+		<blockquote><span>device_model%3INSERT-YOUR-CACHE-BUSTER-MACRO-HERE&amp;</span></blockquote>
+
+		<p>
+			DFP will respond The mime-type determines what headers DFP will respond with, in the case of VAST, mime-type=text/xml.
+		</p>
+
+		<blockquote><span>m=text/xml</span></blockquote>
+		
+		<div class="note">
+			Note:<br>
+			The <strong>device_model</strong> macro must be expanded before the SS/DAI system receives the BrightLine DFP VAST tag. When the app makes a call to the first ad mediation layer, device information should be passed and then propagated to BrightLine's DFP VAST tag in the <strong>device_model</strong> macro. DFP uses this information to serve the appropriate response to the correct device from the <strong>device_model</strong> key val.
+		</div>
+
+		<a class="goto" name="vast-response-examples">&nbsp;</a>
+		<h2>VAST response examples</h2>
+
+		<a class="goto" name="vast-response-example-roku">&nbsp;</a>
+		<h3>Roku</h3>
+		<blockquote>
+			<a href="http://pubads.g.doubleclick.net/gampad/adx?iu=/52320903/certification&sz=2x2&c=2879647539845&c
+		ust_params=campaign%3Dsample-roku-vast%26device_model%3Droku&m=text/xml" target="_blank">http://pubads.g.doubleclick.net/gampad/adx?iu=/52320903/certification&sz=2x2&amp;c=2879647539845&amp;c
+		ust_params=campaign%3Dsample-roku-vast%26device_model%3Droku&amp;m=text/xml</a>
+		</blockquote>
+		
+		<a class="goto" name="vast-response-example-appletv">&nbsp;</a>
+		<h3>Apple TV</h3>
+
+		<blockquote>
+			<a href="https://pubads.g.doubleclick.net/gampad/adx?iu=/52320903/certification&sz=2x2&c=2879647539845&
+		cust_params=campaign%3Dsample-appletv-vast%26device_model%3Dappletv&m=text/xml" target="_b">https://pubads.g.doubleclick.net/gampad/adx?iu=/52320903/certification&amp;sz=2x2&amp;c=2879647539845&amp;
+		cust_params=campaign%3Dsample-appletv-vast%26device_model%3Dappletv&amp;m=text/xml</a>
+		</blockquote>
+
+		<a class="goto" name="vast-response-example-webkit">&nbsp;</a>
+		<h3>WebKit (JS) &amp; mobile</h3>
+
+		<blockquote>
+			<a href="http://pubads.g.doubleclick.net/gampad/adx?iu=/52320903/certification&sz=2x2&c=2879647539845&c
+		ust_params=campaign%3Dsample-webkit-vast%26device_model%3Dmobile&m=text/xml" target="_blank">http://pubads.g.doubleclick.net/gampad/adx?iu=/52320903/certification&amp;sz=2x2&amp;c=2879647539845&amp;c
+		ust_params=campaign%3Dsample-webkit-vast%26device_model%3Dmobile&amp;m=text/xml</a>
+		</blockquote>
+		
+		<a class="goto" name="brightline-vast-tracking">&nbsp;</a>
+		<h2>BrightLine VAST tracking</h2>
+		<p class="body_content">
+			The following includes the tracking events BrightLine records from the VAST response:
+		</p>
+
+		<a class="goto" name="brightline-vast-tracking-vast">&nbsp;</a>
+		<h3>VAST</h3>
+		<ul>
+			<li>Impression</li>
+		</ul>
+
+		<a class="goto" name="brightline-vast-tracking-video">&nbsp;</a>
+		<h3>Video</h3>
+		<ul>
+			<li>start</li>
+			<li>firstQuartile</li>
+			<li>midpoint</li>
+			<li>thirdQuartile</li>
+			<li>complete</li>
+		</ul>
+
+		<a class="goto" name="trackingevents-ownership">&nbsp;</a>
+		<h2>TrackingEvents ownership</h2>
+		<p class="body_content">
+			The hosting application will be responsible for displaying the promotional ad, sending playback tracking events (start, firstQuartile, midPoint, thirdQuartile and complete).
+		</p>
+
+		<p class="body_content">
+			The BrightLine SDK is responsible for sending the optional companion ad tracking events (impression, acceptInvitation). If the hosting application doesn't have companion tracking events, the BrightLine renderer will fire the appropriate tracking events by default.
+		</p>
+
+		<a class="goto" name="vast-companion-banner-nodes">&nbsp;</a>
+		<h2>VAST Companion banner nodes</h2>
+		<p class="body_content">
+			As a non-VPAID solution for serving interactive overlays that render on top of a commercial spot, BrightLine DFP VAST responses use the companion banner node URL to serve a file with the rendering instructions the BrightLine SDK will ingest. There are different companions per platform loaded as HTML or JSON.
+		</p>
+
+		<a class="goto" name="vast-roku-companion-banner-nodes">&nbsp;</a>
+		<h3>Roku companion</h3>
+		<p>
+			BrightLine supports Scene Graph and 1.0 BrightScript ad formats for the Roku Ad Framework (RAF). If your Roku channel is integrated with RAF, you are automatically BrightLine enabled. Parsing and handling this information is handled by the BrightScript Roku renderer through RAF. Both companions have <strong>StaticResource</strong> and <strong>creativeType</strong> of <strong>application/json</strong>.
+		</p>
+
+		<pre>
+			<code class="xml">
+&lt;Creative id="COMPANION_138207267089" sequence="1"&gt;
+    &lt;CompanionAds&gt;
+        &lt;Companion id="COMPANION_OVERLAY_138207267089" width="1280" height="720" apiFramework="brightline_RSG"&gt;
+            &lt;StaticResource creativeType="application/json"&gt;
+                &lt;![CDATA[http://cdn-media.brightline.tv/ads/2016-q4-joe-sg-tests/videoGallery.json?mblist=0]]&gt;
+            &lt;/StaticResource&gt;
+        &lt;/Companion&gt;
+        &lt;Companion id="COMPANION_OVERLAY_138207267089" width="1280" height="720" apiFramework="brightline"&gt;
+            &lt;StaticResource creativeType="application/json"&gt;
+                &lt;![CDATA[http://cdn-media.brightline.tv/a/demo-2016-q1-chevy-volt-my2017-239459-roku/1/overlay.json?mblist=0]]&gt;
+            &lt;/StaticResource&gt;
+        &lt;/Companion&gt;
+    &lt;/CompanionAds&gt;
+&lt;/Creative&gt;
+			</code>
+		</pre>
+
+		<a class="goto" name="vast-appletv-companion-banner-nodes">&nbsp;</a>
+		<h3>Apple TV companion</h3>
+		<P class="body_content">
+			Apple TV will load a JSON data object that contains all instructions the BrightLine renderer will need to execute the ad experience. Apple TV will always need secure assets.
+		</P>
+
+		<pre>
+			<code class="xml">
+&lt;Creative id="COMPANION_138207268199" sequence="1"&gt;
+	&lt;CompanionAds&gt;
+		&lt;Companion id="COMPANION_OVERLAY_138207268199" width="1280" height="720" apiFramework="brightline"&gt;
+			&lt;StaticResource creativeType="application/json"&gt;
+				&lt;![CDATA[https://pubads.g.doubleclick.net/gampad/adx?iu=/52320903/qa&sz=3x3&c=562824437&cust_params=campaign%3Dengageable-overlay-standard&m=application/json]]&gt;
+			&lt;/StaticResource&gt;
+		&lt;/Companion&gt;
+	&lt;/CompanionAds&gt;
+&lt;/Creative&gt;
+			</code>
+		</pre>
+
+		<a class="goto" name="vast-webkit-companion-banner-nodes">&nbsp;</a>
+		<h3>WebKit companion</h3>
+		<p class="body_content">
+			Any platforms using a WebKit will load an HTML file that renders the proper ad, exposing callbacks to the hosting application. WebKits are used for native Android and iOS applications and friendly iFrames are used for desktop and mobile web.
+		</p>
+
+		<pre>
+			<code class="xml">
+&lt;Creative id="1138207261006" sequence="1"&gt;
+	&lt;CompanionAds&gt;
+		&lt;Companion id="overlay" width="1280" height="720" apiFramework="brightline"&gt;
+			&lt;IFrameResource&gt;
+				&lt;![CDATA[http://pubads.g.doubleclick.net/gampad/adx?iu=/52320903/onboarding&sz=3x3&c=193694870&cust_params=platform%3Dwebkit%26product%3Dengageable-overlay&m=text/html]]&gt;
+			&lt;/IFrameResource&gt;
+		&lt;/Companion&gt;
+	&lt;/CompanionAds&gt;
+&lt;/Creative&gt;
+			</code>
+		</pre>
+
+		<a class="goto" name="general-ad-flow">&nbsp;</a>
+		<h2>General ad flow</h2>
+		<p class="body_content">
+			When integrating with a SS/DAI vendor (mDialog/Google DAI, Uplynk, FreeWheel, etc.), the hosting application will trigger the BrightLine SDK in the appropriate ad break event callback method with a data object that contains the <strong>CompanionAds</strong> node from the BrightLine DFP VAST tag. Below are the typical steps when a BrightLine ad is served.
+		</p>
+
+		<ol>
+			<li>The appropriate ad break event callback method is identified from the SS/DAI vendor during promotional ad playback.</li>
+			<li>Once the ad break event callback is invoked, the data object from the callback method to is used to get access to the VAST <strong>CompanionAds</strong> node data.</li>
+			<li>The data object property that relates to the companion ad information is used to inspect the <strong>apiFramework</strong> attribute for value <strong>brightline</strong>.</li>
+			<li>From the vendor ad break callback, the app constructs a JSON schema (ad definition) indicated below from the vendor ad data object.</li>
+		</ol>
+
+		<a class="goto" name="general-ad-flow-sample-json-ad-definition">&nbsp;</a>
+		<h3>Sample JSON ad definition from SS/DAI vendor ad data object:</h3>
+
+		<pre>
+			<code class="json">
+{
+	"apiFramework": "brightline",
+	"companion": {
+		"url": "http://cdn-media.brightline.tv/a/demo-2016-q1-chevy-volt-my2017-239459-roku/1/overlay.json?mblist=0",
+	}
+}
+			</code>
+		</pre>
+
+		<a class="goto" name="general-ad-flow-ad-definition-attributes">&nbsp;</a>
+		<h3>Ad definition attributes</h3>
+		<ul>
+			<li><strong>apiFramework</strong> - this attribute should be populated from the vendor ad data object and should always be <strong>"brightline"</strong>.</li>
+			<li><strong>companion.url</strong> - this attribute should be populated with the URLs from the StaticResource element.</li>
+		</ul>
+
+	</div>
+
+</body>
+</html>
